@@ -3,12 +3,12 @@ import './App.css' // Make sure this import is present!
 
 function App () {
   const [length , setLength] = useState (8)
-  const [numbersAllowed , setNumbers] = useState (false)
+  const [numbersAllowed , setNumbers] = useState (true)
   const [charAllowed , setCharacters] = useState (false)
   const [password, setPassword] = useState("")
 
 
-  const passwordGenerator = useEffect (() =>{
+  const passwordGenerator = useCallback (() =>{
   var pass =""
   let str ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
@@ -22,6 +22,13 @@ function App () {
   }
   setPassword(pass)
   },[length,numbersAllowed,charAllowed,setPassword])
+   
+  useEffect (() =>{
+   passwordGenerator() 
+  },[length,numbersAllowed,charAllowed,setPassword])
+
+
+
 
   return (
     <div className="password-container">
@@ -50,6 +57,7 @@ function App () {
         <label className="checkbox-label">
           <input
           type="checkbox"  
+          defaultChecked
           onChange={() =>{setNumbers((prev) => !prev)}}
           />
           <span className="label-text">Numbers</span>
