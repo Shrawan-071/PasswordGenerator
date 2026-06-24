@@ -1,4 +1,4 @@
-import { useEffect, useState ,useCallback } from 'react'
+import { useEffect, useState ,useCallback, useRef } from 'react'
 import './App.css' // Make sure this import is present!
 
 function App () {
@@ -6,7 +6,8 @@ function App () {
   const [numbersAllowed , setNumbers] = useState (true)
   const [charAllowed , setCharacters] = useState (false)
   const [password, setPassword] = useState("")
-
+   
+  const passwordRef = useRef(null)
 
   const passwordGenerator = useCallback (() =>{
   var pass =""
@@ -22,7 +23,14 @@ function App () {
   }
   setPassword(pass)
   },[length,numbersAllowed,charAllowed,setPassword])
-   
+
+  const copyPasswordToClipboard = useCallback ( ()=>{
+    passwordRef.current?.select()
+    window.navigator.clipboard.writeText(password)
+
+  },[password])
+
+
   useEffect (() =>{
    passwordGenerator() 
   },[length,numbersAllowed,charAllowed,setPassword])
@@ -38,8 +46,11 @@ function App () {
           value={password}
           readOnly 
           className="password-input"
+          ref={passwordRef}
         />
-        <button className="copy-btn">copy</button>
+        <button 
+        onClick={copyPasswordToClipboard}
+        className="copy-btn">copy</button>
       </div>
       
       <div className="controls-wrapper">
